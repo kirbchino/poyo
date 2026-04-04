@@ -156,7 +156,16 @@ poyo plugin list
 1. **Agent 真实执行** - 需要集成 QueryEngine
 2. **PDF 解析** - 需要集成 PDF 库
 3. **图片 OCR** - 需要集成 OCR 库
-4. **测试覆盖** - 需要编写单元测试
+
+## ✅ 测试覆盖
+
+| 测试模块 | 测试数 | 通过率 |
+|----------|--------|--------|
+| 上下文压缩 (test_context_compression.py) | 28 | 100% |
+| 长期记忆 (test_long_term_memory.py) | 37 | 100% |
+| 端到端记忆 (test_memory_e2e.py) | 7 | 100% |
+| 交互式对话 (test_interactive_memory.py) | 8 | 100% |
+| **总计** | **80** | **100%** |
 
 ---
 

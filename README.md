@@ -89,7 +89,7 @@ poyo/
 
 ```bash
 # 克隆仓库
-git clone https://github.com/your-org/poyo.git
+git clone https://github.com/kirbchino/poyo.git
 cd poyo
 
 # 构建
