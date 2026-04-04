@@ -1,0 +1,35 @@
+{
+  "id": "script-python-example",
+  "name": "Python Script Plugin Example",
+  "version": "1.0.0",
+  "description": "🐍 Python 脚本插件示例，展示 Script 插件的所有能力",
+  "author": "Poyo Team",
+  "type": "script",
+  "main": "main.py",
+  "enabled": true,
+  "config": {
+    "prefix": "[PythonPlugin]",
+    "debug": true,
+    "maxRetries": 3
+  },
+  "hooks": [
+    {"type": "PreToolUse", "priority": 100},
+    {"type": "PostToolUse", "priority": 50}
+  ],
+  "tools": [
+    {
+      "name": "py_hello",
+      "description": "Say hello from Python"
+    },
+    {
+      "name": "py_analyze",
+      "description": "Analyze text with Python"
+    }
+  ],
+  "commands": [
+    {
+      "name": "/py-demo",
+      "description": "Run Python plugin demo"
+    }
+  ]
+}

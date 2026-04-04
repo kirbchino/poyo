@@ -1,0 +1,80 @@
+{
+  "name": "git-helper",
+  "version": "2.0.0",
+  "description": "🔧 Poyo Git Helper - Git 操作增强插件",
+  "type": "script",
+  "main": "main.py",
+  "tools": [
+    {
+      "name": "git_status_enhanced",
+      "description": "增强的 git status，显示更多信息",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "porcelain": {"type": "boolean", "description": "使用 porcelain 格式"},
+          "show_untracked": {"type": "boolean", "description": "显示未跟踪文件"}
+        }
+      },
+      "handler": "git_status_enhanced",
+      "concurrent": true
+    },
+    {
+      "name": "git_commit_smart",
+      "description": "智能提交，自动生成 commit message",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "要提交的文件列表"
+          },
+          "message": {"type": "string", "description": "自定义提交信息"},
+          "auto_stage": {"type": "boolean", "description": "自动暂存修改的文件"}
+        }
+      },
+      "handler": "git_commit_smart"
+    },
+    {
+      "name": "git_branch_manager",
+      "description": "分支管理工具",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["list", "create", "delete", "switch"],
+            "description": "分支操作类型"
+          },
+          "branch": {"type": "string", "description": "分支名"},
+          "base": {"type": "string", "description": "创建分支的基础分支"}
+        },
+        "required": ["action"]
+      },
+      "handler": "git_branch_manager"
+    }
+  ],
+  "commands": [
+    {
+      "name": "/git-log-pretty",
+      "description": "美化的 git log 输出"
+    }
+  ],
+  "hooks": [
+    {
+      "type": "PreToolUse",
+      "priority": 50,
+      "handler": "on_pre_tool_use"
+    },
+    {
+      "type": "PostToolUse",
+      "priority": 50,
+      "handler": "on_post_tool_use"
+    }
+  ],
+  "permissions": [
+    "file:read",
+    "file:write",
+    "execute"
+  ]
+}

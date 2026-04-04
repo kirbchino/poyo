@@ -1,0 +1,29 @@
+{
+  "id": "script-shell-example",
+  "name": "Shell Script Plugin Example",
+  "version": "1.0.0",
+  "description": "🐚 Shell 脚本插件示例，展示 Shell 脚本插件的能力",
+  "author": "Poyo Team",
+  "type": "script",
+  "main": "main.sh",
+  "enabled": true,
+  "config": {
+    "prefix": "[ShellPlugin]",
+    "debug": true
+  },
+  "hooks": [
+    {"type": "PreToolUse", "priority": 80}
+  ],
+  "tools": [
+    {
+      "name": "shell_info",
+      "description": "Get system info from shell"
+    }
+  ],
+  "commands": [
+    {
+      "name": "/shell-demo",
+      "description": "Run shell plugin demo"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "api": {
+    "base_url": "https://api.anthropic.com/v1",
+    "type": "anthropic",
+    "custom_headers": {},
+    "timeout": 120,
+    "max_tokens": 4096
+  },
+  "model": "claude-sonnet-4-6",
+  "permission_mode": "default",
+  "max_turns": 0,
+  "debug": false,
+  "tools": {
+    "enabled": [],
+    "disabled": [],
+    "bash": {
+      "timeout": 120000
+    },
+    "file": {
+      "max_file_size": 10485760
+    }
+  },
+  "mcp_servers": {}
+}

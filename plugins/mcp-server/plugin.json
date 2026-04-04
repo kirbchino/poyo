@@ -1,0 +1,14 @@
+{
+  "id": "mcp-server-example",
+  "name": "MCP Server Example Plugin",
+  "version": "1.0.0",
+  "description": "🔌 MCP (Model Context Protocol) 服务插件示例，展示 MCP 的所有能力",
+  "author": "Poyo Team",
+  "type": "mcp",
+  "main": "node main.js",
+  "enabled": true,
+  "config": {
+    "prefix": "[MCPPlugin]",
+    "debug": true
+  }
+}

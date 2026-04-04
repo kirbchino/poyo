@@ -1,0 +1,29 @@
+{
+  "id": "script-node-example",
+  "name": "Node.js Script Plugin Example",
+  "version": "1.0.0",
+  "description": "📦 Node.js 脚本插件示例，展示 Node.js 插件的能力",
+  "author": "Poyo Team",
+  "type": "script",
+  "main": "main.js",
+  "enabled": true,
+  "config": {
+    "prefix": "[NodePlugin]",
+    "debug": true
+  },
+  "hooks": [
+    {"type": "PostToolUse", "priority": 60}
+  ],
+  "tools": [
+    {
+      "name": "node_json",
+      "description": "JSON processing with Node.js"
+    }
+  ],
+  "commands": [
+    {
+      "name": "/node-demo",
+      "description": "Run Node.js plugin demo"
+    }
+  ]
+}

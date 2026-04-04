@@ -1,0 +1,31 @@
+{
+  "id": "wasm-example",
+  "name": "WASM Plugin Example",
+  "version": "1.0.0",
+  "description": "⚡ WebAssembly 插件示例，展示 WASM 插件的能力",
+  "author": "Poyo Team",
+  "type": "wasm",
+  "main": "main.wasm",
+  "enabled": true,
+  "config": {
+    "prefix": "[WASMPlugin]",
+    "debug": true,
+    "memory_limit": 65536
+  },
+  "tools": [
+    {
+      "name": "wasm_hello",
+      "description": "Hello from WebAssembly"
+    },
+    {
+      "name": "wasm_compute",
+      "description": "Heavy computation in WASM"
+    }
+  ],
+  "commands": [
+    {
+      "name": "/wasm-demo",
+      "description": "Run WASM plugin demo"
+    }
+  ]
+}

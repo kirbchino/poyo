@@ -1,0 +1,71 @@
+# Binaries
+cc
+poyo
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Build artifacts
+/bin/
+/dist/
+*.tar.gz
+*.zip
+
+# IDE and editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Test and coverage
+*.out
+coverage.txt
+coverage.html
+*.test
+*.prof
+
+# Vendor
+/vendor/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+secrets.json
+
+# Internal config (should not be published)
+.internal-cc/
+
+# Claude local settings
+.claude/
+
+# Temporary outputs
+.ark/
+/tmp/
+
+# Logs
+*.log
+logs/
+
+# Documentation archives
+*.tar.gz
+
+# Development
+*.bak
+TODO.md
+NOTES.md

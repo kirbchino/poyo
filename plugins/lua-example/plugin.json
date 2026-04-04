@@ -1,0 +1,30 @@
+{
+  "id": "lua-example",
+  "name": "Lua Example Plugin",
+  "version": "1.0.0",
+  "description": "Example plugin demonstrating Lua scripting capabilities",
+  "author": "Poyo Team",
+  "type": "lua",
+  "main": "main.lua",
+  "enabled": true,
+  "config": {
+    "prefix": "[LuaPlugin]",
+    "debug": true
+  },
+  "hooks": [
+    {"type": "PreToolUse", "priority": 100},
+    {"type": "PostToolUse", "priority": 50}
+  ],
+  "tools": [
+    {
+      "name": "lua_greet",
+      "description": "Greet someone using Lua"
+    }
+  ],
+  "commands": [
+    {
+      "name": "/lua-hello",
+      "description": "Say hello from Lua"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "name": "memory",
+  "version": "1.0.0",
+  "description": "🧠 Poyo Memory Plugin - 持久化记忆管理",
+  "type": "lua",
+  "main": "main.lua",
+  "tools": [
+    {
+      "name": "memory_store",
+      "description": "存储记忆到持久化存储",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "key": {"type": "string", "description": "记忆的键"},
+          "value": {"type": "string", "description": "记忆的值"},
+          "namespace": {"type": "string", "description": "命名空间，默认为 default"}
+        },
+        "required": ["key", "value"]
+      },
+      "handler": "store"
+    },
+    {
+      "name": "memory_retrieve",
+      "description": "从持久化存储检索记忆",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "key": {"type": "string", "description": "记忆的键"},
+          "namespace": {"type": "string", "description": "命名空间"}
+        },
+        "required": ["key"]
+      },
+      "handler": "retrieve"
+    },
+    {
+      "name": "memory_list",
+      "description": "列出所有记忆",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "namespace": {"type": "string", "description": "命名空间，为空则列出全部"}
+        }
+      },
+      "handler": "list"
+    },
+    {
+      "name": "memory_forget",
+      "description": "删除指定记忆",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "key": {"type": "string", "description": "要删除的记忆键"},
+          "namespace": {"type": "string", "description": "命名空间"}
+        },
+        "required": ["key"]
+      },
+      "handler": "forget"
+    }
+  ],
+  "commands": [
+    {
+      "name": "/memory-stats",
+      "description": "显示记忆存储统计"
+    }
+  ],
+  "hooks": [
+    {
+      "type": "PreToolUse",
+      "priority": 100,
+      "handler": "on_pre_tool_use"
+    }
+  ],
+  "config": {
+    "max_memory_size": 10000,
+    "default_namespace": "default",
+    "persistence_file": ".poyo/memory.json"
+  }
+}

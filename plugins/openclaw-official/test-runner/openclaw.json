@@ -1,0 +1,117 @@
+{
+  "id": "test-runner",
+  "name": "Test Runner",
+  "version": "2.1.0",
+  "description": "🧪 OpenClaw Test Runner - 测试执行和管理工具",
+  "author": "OpenClaw Team",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/openclaw/test-runner",
+  "runtime": "python",
+  "entry": "main.py",
+  "provides": {
+    "tools": [
+      {
+        "name": "run_tests",
+        "description": "运行测试套件",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "测试文件或目录路径"
+            },
+            "framework": {
+              "type": "string",
+              "enum": ["pytest", "jest", "go-test", "unittest"],
+              "description": "测试框架"
+            },
+            "coverage": {
+              "type": "boolean",
+              "description": "是否生成覆盖率报告"
+            },
+            "parallel": {
+              "type": "integer",
+              "description": "并行执行的进程数"
+            }
+          },
+          "required": ["path"]
+        }
+      },
+      {
+        "name": "list_tests",
+        "description": "列出所有可用的测试",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "要扫描的路径"
+            },
+            "pattern": {
+              "type": "string",
+              "description": "测试名称过滤模式"
+            }
+          },
+          "required": ["path"]
+        }
+      },
+      {
+        "name": "generate_test",
+        "description": "为代码自动生成测试",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "source_file": {
+              "type": "string",
+              "description": "源文件路径"
+            },
+            "output_dir": {
+              "type": "string",
+              "description": "测试输出目录"
+            },
+            "style": {
+              "type": "string",
+              "enum": ["unit", "integration", "both"],
+              "description": "测试风格"
+            }
+          },
+          "required": ["source_file"]
+        }
+      }
+    ],
+    "commands": [
+      {
+        "name": "test-coverage",
+        "description": "运行测试并生成覆盖率报告",
+        "usage": "/test-coverage [path]"
+      }
+    ],
+    "hooks": [
+      {
+        "event": "tool.use.after",
+        "priority": 40,
+        "handler": "afterToolUse"
+      }
+    ]
+  },
+  "config": {
+    "defaultFramework": "pytest",
+    "timeout": 300,
+    "reportFormat": "junit",
+    "outputDir": "./test-results"
+  },
+  "requires": [
+    {
+      "type": "permission",
+      "name": "file:read"
+    },
+    {
+      "type": "permission",
+      "name": "file:write"
+    },
+    {
+      "type": "permission",
+      "name": "execute"
+    }
+  ]
+}

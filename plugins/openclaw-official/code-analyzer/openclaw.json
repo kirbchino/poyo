@@ -1,0 +1,132 @@
+{
+  "id": "code-analyzer",
+  "name": "Code Analyzer",
+  "version": "1.5.0",
+  "description": "🔍 OpenClaw Code Analyzer - 代码分析工具",
+  "author": "OpenClaw Team",
+  "license": "MIT",
+  "repository": "https://github.com/openclaw/code-analyzer",
+  "runtime": "node",
+  "entry": "main.js",
+  "provides": {
+    "tools": [
+      {
+        "name": "analyze_code",
+        "description": "分析代码质量、复杂度和潜在问题",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "要分析的文件或目录路径"
+            },
+            "rules": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "要应用的规则列表"
+            },
+            "format": {
+              "type": "string",
+              "enum": ["json", "text", "markdown"],
+              "description": "输出格式"
+            }
+          },
+          "required": ["path"]
+        },
+        "returns": {
+          "type": "object",
+          "properties": {
+            "issues": {"type": "array"},
+            "metrics": {"type": "object"},
+            "summary": {"type": "string"}
+          }
+        },
+        "examples": [
+          {
+            "path": "./src",
+            "format": "json"
+          }
+        ]
+      },
+      {
+        "name": "detect_patterns",
+        "description": "检测代码中的设计模式",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "要分析的文件路径"
+            },
+            "patterns": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "要检测的模式类型"
+            }
+          },
+          "required": ["path"]
+        }
+      },
+      {
+        "name": "calculate_complexity",
+        "description": "计算代码复杂度指标",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "要分析的文件路径"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["cyclomatic", "cognitive", "halstead"],
+              "description": "复杂度类型"
+            }
+          },
+          "required": ["path"]
+        }
+      }
+    ],
+    "commands": [
+      {
+        "name": "analyze-project",
+        "description": "分析整个项目",
+        "usage": "/analyze-project [path]"
+      }
+    ],
+    "hooks": [
+      {
+        "event": "tool.use.before",
+        "priority": 80,
+        "handler": "beforeToolUse"
+      },
+      {
+        "event": "tool.use.after",
+        "priority": 60,
+        "handler": "afterToolUse"
+      }
+    ],
+    "routes": [
+      {
+        "method": "GET",
+        "path": "/analyze/:path",
+        "handler": "httpAnalyze"
+      }
+    ]
+  },
+  "config": {
+    "defaultRules": ["best-practices", "security", "performance"],
+    "maxFileSize": 1048576,
+    "excludePatterns": ["node_modules", ".git", "dist", "build"]
+  },
+  "requires": [
+    {
+      "type": "permission",
+      "name": "file:read"
+    },
+    {
+      "type": "permission",
+      "name": "workspace"
+    }
+  ]
+}

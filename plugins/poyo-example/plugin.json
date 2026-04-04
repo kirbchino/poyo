@@ -1,0 +1,8 @@
+{
+  "id": "poyo-example",
+  "name": "Poyo Example Plugin",
+  "version": "1.0.0",
+  "description": "💚 Poyo 示例插件，展示 Poyo 的能力系统",
+  "type": "lua",
+  "main": "main.lua"
+}

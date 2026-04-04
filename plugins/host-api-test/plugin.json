@@ -1,0 +1,25 @@
+{
+  "id": "host-api-test",
+  "name": "Host API Test Plugin",
+  "version": "1.0.0",
+  "description": "🧪 测试插件反向调用 Host 的所有能力",
+  "author": "Poyo Team",
+  "type": "lua",
+  "main": "main.lua",
+  "enabled": true,
+  "config": {
+    "test_mode": "full",
+    "debug": true
+  },
+  "tools": [
+    {"name": "test_tool_call", "description": "测试工具调用"},
+    {"name": "test_file_ops", "description": "测试文件操作"},
+    {"name": "test_http", "description": "测试 HTTP 请求"},
+    {"name": "test_cache", "description": "测试缓存"},
+    {"name": "test_all_apis", "description": "测试所有 API"}
+  ],
+  "hooks": [
+    {"type": "PreToolUse", "priority": 100},
+    {"type": "PostToolUse", "priority": 50}
+  ]
+}
