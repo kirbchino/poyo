@@ -165,7 +165,13 @@ poyo plugin list
 | 长期记忆 (test_long_term_memory.py) | 37 | 100% |
 | 端到端记忆 (test_memory_e2e.py) | 7 | 100% |
 | 交互式对话 (test_interactive_memory.py) | 8 | 100% |
-| **总计** | **80** | **100%** |
+| 多Agent场景 (test_multi_agent_scenario.py) | 5 | 100% |
+| **总计** | **85** | **100%** |
+
+## 📚 文档
+
+- [技术文档](docs/DOCUMENTATION.md) - 完整的项目文档
+- [README.md](README.md) - 项目介绍和快速开始
 
 ---
 
