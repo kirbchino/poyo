@@ -444,6 +444,70 @@ class Team:
 class ScenarioFactory:
     """场景工厂 - 创建预定义的多 Agent 场景"""
 
+    # 预定义的角色模板
+    ROLE_TEMPLATES = {
+        "coordinator": {
+            "role": AgentRole.COORDINATOR,
+            "suffix": "协调者-卡比",
+            "capabilities": ["coordinate", "plan", "assign"],
+        },
+        "developer": {
+            "role": AgentRole.WORKER,
+            "suffix": "开发者-剑士卡比",
+            "capabilities": ["code", "develop", "implement", "debug"],
+        },
+        "reviewer": {
+            "role": AgentRole.REVIEWER,
+            "suffix": "审核者-刀片卡比",
+            "capabilities": ["review", "audit", "check"],
+        },
+        "tester": {
+            "role": AgentRole.TESTER,
+            "suffix": "测试者-闪电卡比",
+            "capabilities": ["test", "verify", "validate"],
+        },
+        "researcher": {
+            "role": AgentRole.RESEARCHER,
+            "suffix": "研究者-吸入卡比",
+            "capabilities": ["research", "search", "collect"],
+        },
+        "analyzer": {
+            "role": AgentRole.ANALYZER,
+            "suffix": "分析者-火焰卡比",
+            "capabilities": ["analyze", "process", "summarize"],
+        },
+        "writer": {
+            "role": AgentRole.WRITER,
+            "suffix": "写作者-石头卡比",
+            "capabilities": ["write", "document", "format"],
+        },
+        "devops": {
+            "role": AgentRole.DEVOPS,
+            "suffix": "运维者-忍者卡比",
+            "capabilities": ["fix", "repair", "deploy", "configure"],
+        },
+        "monitor": {
+            "role": AgentRole.MONITOR,
+            "suffix": "监控者-光束卡比",
+            "capabilities": ["monitor", "detect", "alert"],
+        },
+        "validator": {
+            "role": AgentRole.VALIDATOR,
+            "suffix": "验证者-闪电卡比",
+            "capabilities": ["verify", "validate", "confirm"],
+        },
+    }
+
+    # 预定义的工作流模板
+    WORKFLOW_TEMPLATES = {
+        "software_dev": ["coordinator", "developer", "reviewer", "tester"],
+        "research": ["coordinator", "researcher", "analyzer", "writer"],
+        "devops": ["monitor", "devops", "reviewer", "validator"],
+        "content_creation": ["coordinator", "researcher", "writer", "reviewer"],
+        "data_analysis": ["coordinator", "researcher", "analyzer", "validator"],
+        "bug_fix": ["coordinator", "developer", "reviewer", "tester"],  # 添加协调者
+    }
+
     @staticmethod
     def create_dev_team() -> Team:
         """创建软件开发团队"""
@@ -584,6 +648,121 @@ class ScenarioFactory:
         team.add_agent(validator)
 
         return team
+
+    @staticmethod
+    def create_custom_team(prompt: str) -> Team:
+        """
+        根据自然语言提示词创建自定义场景团队
+
+        示例提示词:
+        - "开发一个Web应用" → 软件开发团队
+        - "研究AI技术趋势并写报告" → 研究团队
+        - "修复线上故障" → DevOps团队
+        - "写一篇技术博客" → 内容创作团队
+        - "分析用户数据" → 数据分析团队
+        """
+        import re
+
+        # 场景关键词匹配
+        scenario_keywords = {
+            "software_dev": [
+                "开发", "编程", "代码", "实现", "编写", "构建",
+                "web应用", "api", "功能", "模块", "系统",
+                "develop", "code", "implement", "build"
+            ],
+            "research": [
+                "研究", "调研", "分析", "报告", "论文", "调查",
+                "趋势", "技术", "文献", "资料",
+                "research", "analyze", "report", "study"
+            ],
+            "devops": [
+                "运维", "故障", "修复", "部署", "监控", "上线",
+                "服务器", "数据库", "网络", "性能",
+                "devops", "deploy", "fix", "monitor", "incident"
+            ],
+            "content_creation": [
+                "写", "创作", "博客", "文章", "文档", "内容",
+                "撰写", "编辑", "发布",
+                "write", "create", "blog", "article", "content"
+            ],
+            "data_analysis": [
+                "数据", "分析", "统计", "报表", "可视化",
+                "挖掘", "处理", "洞察",
+                "data", "analysis", "analytics", "statistics"
+            ],
+            "bug_fix": [
+                "bug", "缺陷", "错误", "问题", "修复",
+                "调试", "排查", "定位",
+                "fix", "debug", "issue", "problem"
+            ],
+        }
+
+        # 计算各场景匹配分数
+        scores = {}
+        prompt_lower = prompt.lower()
+        for scenario, keywords in scenario_keywords.items():
+            score = sum(1 for kw in keywords if kw in prompt_lower)
+            if score > 0:
+                scores[scenario] = score
+
+        # 选择最佳匹配场景
+        if scores:
+            best_scenario = max(scores, key=scores.get)
+        else:
+            best_scenario = "software_dev"  # 默认
+
+        # 获取工作流模板
+        workflow = ScenarioFactory.WORKFLOW_TEMPLATES.get(best_scenario, ["coordinator", "worker", "reviewer"])
+
+        # 创建团队
+        team_id = f"team-custom-{int(time.time())}"
+        team = Team(
+            id=team_id,
+            name=f"自定义团队 ({best_scenario})",
+            description=f"根据提示词自动生成: {prompt[:50]}..."
+        )
+
+        # 根据工作流添加 Agent
+        for i, role_key in enumerate(workflow):
+            template = ScenarioFactory.ROLE_TEMPLATES.get(role_key)
+            if template:
+                agent = Agent(
+                    id=f"agent-{role_key}-{i}",
+                    name=template["suffix"],
+                    role=template["role"],
+                    capabilities=template["capabilities"].copy(),
+                )
+                team.add_agent(agent)
+
+        return team
+
+    @staticmethod
+    def parse_custom_workflow(prompt: str) -> List[str]:
+        """
+        从提示词中解析工作流步骤
+
+        支持格式:
+        - "第一步...第二步...第三步..."
+        - "先...然后...最后..."
+        - "1. ... 2. ... 3. ..."
+        """
+        import re
+
+        steps = []
+
+        # 尝试匹配编号步骤
+        numbered = re.findall(r'\d+[.、]\s*([^\d]+?)(?=\d+[.、]|$)', prompt)
+        if numbered:
+            steps = [s.strip() for s in numbered if s.strip()]
+            return steps
+
+        # 尝试匹配顺序词
+        sequential = re.split(r'首先|第一步|然后|接着|第二步|之后|第三步|最后|最终', prompt)
+        if len(sequential) > 1:
+            steps = [s.strip() for s in sequential[1:] if s.strip()]
+            return steps
+
+        return steps
 
 # ==================== 场景执行器 ====================
 
@@ -792,7 +971,87 @@ def test_agent_collaboration():
 
     return len(dev_msgs) > 0 and len(review_msgs) > 0 and len(test_msgs) > 0
 
+def test_custom_scenario():
+    """测试自定义场景"""
+    print(f"\n{Colors.CYAN}{'='*60}{Colors.END}")
+    cprint(Colors.BOLD, "🧪 场景四: 自定义场景（通过提示词生成）")
+    print(f"{Colors.CYAN}{'='*60}{Colors.END}")
+
+    # 测试不同的自定义提示词
+    test_prompts = [
+        ("开发一个在线商城系统", "software_dev"),
+        ("研究大语言模型的发展趋势并写报告", "research"),
+        ("修复生产环境的内存泄漏问题", "devops"),
+        ("写一篇关于微服务架构的技术博客", "content_creation"),
+        ("分析用户行为数据找出流失原因", "data_analysis"),
+    ]
+
+    all_passed = True
+    for prompt, expected_type in test_prompts:
+        print(f"\n  📝 提示词: \"{prompt}\"")
+
+        # 创建自定义团队
+        team = ScenarioFactory.create_custom_team(prompt)
+
+        # 验证团队创建成功
+        print(f"     → 生成团队: {team.name}")
+        print(f"     → Agent 数量: {len(team.agents)}")
+        print(f"     → Agent 角色: {', '.join(a.role.value for a in team.agents.values())}")
+
+        # 验证至少有协调者或监控者（作为发起者）
+        has_leader = any(
+            a.role in [AgentRole.COORDINATOR, AgentRole.MONITOR]
+            for a in team.agents.values()
+        )
+        if not has_leader:
+            cprint(Colors.RED, f"     ✗ 缺少协调者或监控者")
+            all_passed = False
+        else:
+            cprint(Colors.GREEN, f"     ✓ 团队配置正确")
+
+    return all_passed
+
+def run_custom_scenario(prompt: str):
+    """
+    交互式运行自定义场景
+
+    用法: python test_multi_agent_scenario.py "你的任务描述"
+    """
+    print(f"\n{Colors.GREEN}{'='*60}{Colors.END}")
+    cprint(Colors.BOLD, f"🎯 自定义场景模式")
+    print(f"{Colors.GREEN}{'='*60}{Colors.END}")
+
+    cprint(Colors.CYAN, f"\n📝 你的提示词: {prompt}")
+
+    # 创建自定义团队
+    team = ScenarioFactory.create_custom_team(prompt)
+
+    print(f"\n👥 自动生成的团队:")
+    print(f"   团队名称: {team.name}")
+    print(f"   团队描述: {team.description}")
+    print(f"\n🤖 团队成员:")
+    for agent in team.agents.values():
+        print(f"   - {agent.name} ({agent.role.value})")
+        print(f"     能力: {', '.join(agent.capabilities)}")
+
+    # 运行场景
+    runner = ScenarioRunner(team)
+    results = runner.run_scenario("自定义场景", prompt)
+
+    print(f"\n{'='*60}")
+    cprint(Colors.GREEN, "🎉 自定义场景执行完成!")
+    print(f"{'='*60}\n")
+
+    return results
+
 def main():
+    import sys
+
+    # 如果有命令行参数，运行自定义场景
+    if len(sys.argv) > 1:
+        prompt = " ".join(sys.argv[1:])
+        return run_custom_scenario(prompt)
+
     print(f"\n{Colors.GREEN}{'='*60}{Colors.END}")
     cprint(Colors.BOLD, "🤖 Poyo 场景式多 Agent 模式测试")
     print(f"{Colors.GREEN}{'='*60}{Colors.END}")
@@ -804,6 +1063,7 @@ def main():
     results.append(("研究报告场景", test_research_scenario()))
     results.append(("DevOps场景", test_devops_scenario()))
     results.append(("Agent协作测试", test_agent_collaboration()))
+    results.append(("自定义场景测试", test_custom_scenario()))
 
     # 输出结果
     print(f"\n{Colors.CYAN}{'='*60}{Colors.END}")
@@ -821,6 +1081,8 @@ def main():
     print(f"\n{Colors.CYAN}{'='*60}{Colors.END}")
     if all_passed:
         cprint(Colors.GREEN, "🎉 所有场景测试通过!")
+        cprint(Colors.CYAN, "\n💡 提示: 可以使用自定义场景模式:")
+        cprint(Colors.YELLOW, "   python test_multi_agent_scenario.py \"开发一个在线商城\"")
     else:
         cprint(Colors.RED, "⚠️ 部分场景测试失败")
     print(f"{Colors.CYAN}{'='*60}{Colors.END}\n")
